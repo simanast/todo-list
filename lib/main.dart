@@ -46,7 +46,8 @@ class MainScreenState extends State<StatefulWidget> {
   }
 
   Future<String> initDb() async {
-    if (!dbManager.dbInitialized()) {
+
+    if (map.isEmpty || !dbManager.dbInitialized()) {
       map = await dbManager.init();
     }
     return Future.value('Downloaded');
@@ -93,9 +94,9 @@ class MainScreenState extends State<StatefulWidget> {
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ets;
     }));
-    if (ets.todoText.isNotEmpty) {
+    if (ets.todo!.text.isNotEmpty) {
       dbManager.update(id, todo);
-      map[id] = Todo(text: ets.todoText, time: ets.deadline, isDone: ets.todo!.isDone);
+      map[id] = Todo(text: ets.todo!.text, time: ets.todo!.time, isDone: ets.todo!.isDone);
     }
     if (ets.deadline!.isAfter(DateTime.now())) {
       scheduleNotification(id);
